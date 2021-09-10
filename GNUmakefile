@@ -22,7 +22,7 @@ LDFLAGS += -L"$(shell pg_config --libdir)"
 ifeq ($(shell uname -s), Linux)
 	EXTRALIBS += -lpthread
 endif
-ifeq ($(shell uname -s), Sunos)
+ifeq ($(shell uname -s), SunOS)
 	EXTRALIBS += -lssl -lcrypto -lsocket
 endif
 

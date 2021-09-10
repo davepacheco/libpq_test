@@ -6,7 +6,7 @@ This repo has a tiny C program that uses libpq, plus a Makefile that attempts to
 
 ```
 $ make do_test_dynamic
-gcc -o do_test_dynamic -Wall -Werror -I"/opt/ooce/pgsql-13/include" do_test.c -L"/opt/ooce/pgsql-13/lib/amd64" -R"/opt/ooce/pgsql-13/lib/amd64" -lpq
+gcc -o do_test_dynamic -Wall -Werror -I"/opt/ooce/pgsql-13/include" do_test.c -L"/opt/ooce/pgsql-13/lib/amd64" -Wl,-R"/opt/ooce/pgsql-13/lib/amd64" -lpq
 $ file do_test_dynamic
 do_test_dynamic:	ELF 64-bit LSB executable AMD64 Version 1, dynamically linked, not stripped, no debugging information available
 $ ldd do_test_dynamic
@@ -35,7 +35,7 @@ $ make do_test_static
 gcc -o do_test_static -Wall -Werror -I"/opt/ooce/pgsql-13/include" do_test.c -L"/opt/ooce/pgsql-13/lib/amd64" -Wl,-Bstatic -lpq -lpgcommon -lpgport -Wl,-Bdynamic -lssl -lcrypto -lsocket
 $ file do_test_static
 do_test_static:	ELF 64-bit LSB executable AMD64 Version 1, dynamically linked, not stripped, no debugging information available
-$ ldd ./do_test_static
+$ ldd do_test_static
 	libssl.so.1.1 =>	 /lib/64/libssl.so.1.1
 	libcrypto.so.1.1 =>	 /lib/64/libcrypto.so.1.1
 	libsocket.so.1 =>	 /lib/64/libsocket.so.1
@@ -47,6 +47,7 @@ $ ldd ./do_test_static
 	libm.so.2 =>	 /lib/64/libm.so.2
 $ ./do_test_static
 PQlibVersion=130000
+$
 ```
 
 ## Statically-linked to libpq with --whole-archive option
