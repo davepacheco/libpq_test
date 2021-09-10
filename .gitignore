@@ -1,0 +1,3 @@
+do_test_dynamic
+do_test_static
+do_test_static_wholearchive
