@@ -63,7 +63,7 @@ make: *** [GNUmakefile:17: do_test_static_wholearchive] Error 1
 
 Sure enough, those two .a files each have a symbol called "pqsignal", and they are not the same.
 
-## Test system
+## Test system 1: Helios
 
 ```
 $ uname -a
@@ -113,4 +113,57 @@ LDFLAGS_EX =
 LDFLAGS_SL =
 LIBS = -lpgcommon -lpgport -lxml2 -lssl -lcrypto -lz -lreadline -ltermcap -lnsl -lsocket -lm
 VERSION = PostgreSQL 13.0
+```
+
+## Test system 2: Linux
+
+The output above is from Helios, but the same behavior is reproducible with Linux as well.
+
+```
+[ec2-user@ip-172-31-40-169 libpq_test]$ uname -a
+Linux ip-172-31-40-169.us-west-2.compute.internal 4.14.243-185.433.amzn2.x86_64 #1 SMP Mon Aug 9 05:55:52 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux
+```
+
+```
+[ec2-user@ip-172-31-40-169 libpq_test]$ make --version
+GNU Make 3.82
+Built for x86_64-koji-linux-gnu
+Copyright (C) 2010  Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+```
+[ec2-user@ip-172-31-40-169 libpq_test]$ gcc --version
+gcc (GCC) 7.3.1 20180712 (Red Hat 7.3.1-13)
+Copyright (C) 2017 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+```
+
+```
+[ec2-user@ip-172-31-40-169 libpq_test]$ pg_config
+BINDIR = /home/ec2-user/postgres-install/bin
+DOCDIR = /home/ec2-user/postgres-install/share/doc
+HTMLDIR = /home/ec2-user/postgres-install/share/doc
+INCLUDEDIR = /home/ec2-user/postgres-install/include
+PKGINCLUDEDIR = /home/ec2-user/postgres-install/include
+INCLUDEDIR-SERVER = /home/ec2-user/postgres-install/include/server
+LIBDIR = /home/ec2-user/postgres-install/lib
+PKGLIBDIR = /home/ec2-user/postgres-install/lib
+LOCALEDIR = /home/ec2-user/postgres-install/share/locale
+MANDIR = /home/ec2-user/postgres-install/share/man
+SHAREDIR = /home/ec2-user/postgres-install/share
+SYSCONFDIR = /home/ec2-user/postgres-install/etc
+PGXS = /home/ec2-user/postgres-install/lib/pgxs/src/makefiles/pgxs.mk
+CONFIGURE =  '--without-readline' '--prefix=/home/ec2-user/postgres-install'
+CC = gcc
+CPPFLAGS = -D_GNU_SOURCE
+CFLAGS = -Wall -Wmissing-prototypes -Wpointer-arith -Wdeclaration-after-statement -Werror=vla -Wendif-labels -Wmissing-format-attribute -Wimplicit-fallthrough=3 -Wformat-security -fno-strict-aliasing -fwrapv -fexcess-precision=standard -Wno-format-truncation -O2
+CFLAGS_SL = -fPIC
+LDFLAGS = -Wl,--as-needed -Wl,-rpath,'/home/ec2-user/postgres-install/lib',--enable-new-dtags
+LDFLAGS_EX = 
+LDFLAGS_SL = 
+LIBS = -lpgcommon -lpgport -lpthread -lz -lrt -ldl -lm 
+VERSION = PostgreSQL 13.4
 ```

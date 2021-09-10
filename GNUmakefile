@@ -19,14 +19,23 @@ do_test_dynamic do_test_static do_test_static_wholearchive: do_test.c
 CFLAGS += -Wall -Werror -I"$(shell pg_config --includedir)"
 LDFLAGS += -L"$(shell pg_config --libdir)"
 
-do_test_dynamic: LDFLAGS += -R"$(shell pg_config --libdir)" -lpq
+ifeq ($(shell uname -s), Linux)
+	EXTRALIBS += -lpthread
+endif
+ifeq ($(shell uname -s), Sunos)
+	EXTRALIBS += -lssl -lcrypto -lsocket
+endif
+
+do_test_dynamic: LDFLAGS += -Wl,-R"$(shell pg_config --libdir)" -lpq
+
 do_test_static: LDFLAGS += \
     -Wl,-Bstatic \
     -lpq \
     -lpgcommon \
     -lpgport \
     -Wl,-Bdynamic \
-    -lssl -lcrypto -lsocket
+    $(EXTRALIBS)
+
 do_test_static_wholearchive: LDFLAGS += \
     -Wl,-Bstatic \
     -Wl,--whole-archive \
@@ -35,5 +44,4 @@ do_test_static_wholearchive: LDFLAGS += \
     -lpgport \
     -Wl,--no-whole-archive \
     -Wl,-Bdynamic \
-    -lssl -lcrypto -lsocket
-
+    $(EXTRALIBS)
